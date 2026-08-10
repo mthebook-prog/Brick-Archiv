@@ -404,6 +404,15 @@
     "theme_id": 721,
     "year": 2024
   },
+  "10337-1": {
+    "fetched_at": 1786393349,
+    "name": "Lamborghini Countach 5000 Quattrovalvole",
+    "num_parts": 1506,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10337-1/141579.jpg",
+    "set_url": "https://rebrickable.com/sets/10337-1/lamborghini-countach-5000-quattrovalvole/",
+    "theme_id": 721,
+    "year": 2024
+  },
   "10338-1": {
     "fetched_at": 1786391704,
     "name": "Bumblebee",
@@ -430,6 +439,15 @@
     "set_url": "https://rebrickable.com/sets/11021-1/90-years-of-play/",
     "theme_id": 621,
     "year": 2022
+  },
+  "11377-1": {
+    "fetched_at": 1786393350,
+    "name": "The Lord of the Rings: Minas Tirith",
+    "num_parts": 8278,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/11377-1/173837.jpg",
+    "set_url": "https://rebrickable.com/sets/11377-1/the-lord-of-the-rings-minas-tirith/",
+    "theme_id": 721,
+    "year": 2026
   },
   "21033-1": {
     "fetched_at": 1786391705,
@@ -989,6 +1007,42 @@
     "theme_id": 610,
     "year": 2024
   },
+  "40893-1": {
+    "fetched_at": 1786393351,
+    "name": "Grond",
+    "num_parts": 307,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40893-1/173830.jpg",
+    "set_url": "https://rebrickable.com/sets/40893-1/grond/",
+    "theme_id": 721,
+    "year": 2026
+  },
+  "40894-1": {
+    "fetched_at": 1786393353,
+    "name": "Koenigsegg Sadair's Spear Steering Wheel",
+    "num_parts": 228,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40894-1/175999.jpg",
+    "set_url": "https://rebrickable.com/sets/40894-1/koenigsegg-sadairs-spear-steering-wheel/",
+    "theme_id": 1,
+    "year": 2026
+  },
+  "40912-1": {
+    "fetched_at": 1786393354,
+    "name": "Sea Serpent",
+    "num_parts": 241,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40912-1/177068.jpg",
+    "set_url": "https://rebrickable.com/sets/40912-1/sea-serpent/",
+    "theme_id": 576,
+    "year": 2026
+  },
+  "40955-1": {
+    "fetched_at": 1786393355,
+    "name": "Maersk Dual-Fuel Container Vessel",
+    "num_parts": 1516,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40955-1/168457.jpg",
+    "set_url": "https://rebrickable.com/sets/40955-1/maersk-dual-fuel-container-vessel/",
+    "theme_id": 301,
+    "year": 2026
+  },
   "42056-1": {
     "fetched_at": 1786392198,
     "name": "Porsche 911 GT3 RS",
@@ -1115,6 +1169,15 @@
     "theme_id": 1,
     "year": 2024
   },
+  "42232-1": {
+    "fetched_at": 1786393357,
+    "name": "Koenigsegg Sadair's Spear Megacar",
+    "num_parts": 4104,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/42232-1/175981.jpg",
+    "set_url": "https://rebrickable.com/sets/42232-1/koenigsegg-sadairs-spear-megacar/",
+    "theme_id": 1,
+    "year": 2026
+  },
   "43226-1": {
     "fetched_at": 1786392373,
     "name": "Disney Duos",
@@ -1133,6 +1196,10 @@
     "theme_id": 608,
     "year": 2023
   },
+  "5010053-1": {
+    "error": "not_found",
+    "fetched_at": 1786393358
+  },
   "60440-1": {
     "fetched_at": 1786392376,
     "name": "Yellow Delivery Truck",
@@ -1141,6 +1208,15 @@
     "set_url": "https://rebrickable.com/sets/60440-1/yellow-delivery-truck/",
     "theme_id": 54,
     "year": 2024
+  },
+  "60511-1": {
+    "fetched_at": 1786393359,
+    "name": "Vintage Steam Train",
+    "num_parts": 579,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/60511-1/172392.jpg",
+    "set_url": "https://rebrickable.com/sets/60511-1/vintage-steam-train/",
+    "theme_id": 66,
+    "year": 2026
   },
   "71014-1": {
     "fetched_at": 1786392377,
@@ -2096,6 +2172,24 @@
     "theme_id": 686,
     "year": 2024
   },
+  "80118-1": {
+    "fetched_at": 1786393361,
+    "name": "Fortune Firecracker",
+    "num_parts": 1039,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/80118-1/162977.jpg",
+    "set_url": "https://rebrickable.com/sets/80118-1/fortune-firecracker/",
+    "theme_id": 686,
+    "year": 2025
+  },
+  "80119-1": {
+    "fetched_at": 1786393362,
+    "name": "Galloping Horse Canvas",
+    "num_parts": 1650,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/80119-1/162983.jpg",
+    "set_url": "https://rebrickable.com/sets/80119-1/galloping-horse-canvas/",
+    "theme_id": 686,
+    "year": 2025
+  },
   "92177-1": {
     "fetched_at": 1786392539,
     "name": "Ship in a Bottle",
@@ -2208,6 +2302,10 @@
   "theme:622": {
     "fetched_at": 1786392585,
     "name": "Series 18 Minifigures"
+  },
+  "theme:66": {
+    "fetched_at": 1786393363,
+    "name": "Trains"
   },
   "theme:672": {
     "fetched_at": 1786392547,
