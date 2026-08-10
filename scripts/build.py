@@ -659,50 +659,26 @@ def build_html(df: pd.DataFrame, cache: dict) -> str:
 def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
     records = [build_card_record(row, cache) for _, row in df.iterrows()]
 
-    total_sets = len(records)
-    total_parts = sum(int(r["num_parts"]) for r in records if r["num_parts"])
-    n_themes = len(set(r["theme"] for r in records))
-    status_counts = {k: 0 for k in STATUS_LABELS}
-    for r in records:
-        status_counts[r["status"]] += 1
-
-    zustand_counts = {"neu": 0, "gebraucht": 0}
-    for r in records:
-        zustand_counts["neu" if r["zustand_neu"] else "gebraucht"] += 1
-
-    theme_stats = {}
-    for r in records:
-        t = theme_stats.setdefault(r["theme"], {"count": 0, "parts": 0})
-        t["count"] += 1
-        if r["num_parts"]:
-            t["parts"] += int(r["num_parts"])
-    theme_rows = "".join(
-        f"<tr><td>{html.escape(t)}</td><td>{v['count']}</td><td>{v['parts']:,}</td></tr>"
-        for t, v in sorted(theme_stats.items(), key=lambda x: -x[1]["count"])
-    )
-
+    themes_all = sorted(set(r["theme"] for r in records))
     theme_filter_options = "".join(
-        f'<option value="{html.escape(t)}">{html.escape(t)}</option>' for t in sorted(theme_stats.keys())
+        f'<option value="{html.escape(t)}">{html.escape(t)}</option>' for t in themes_all
     )
 
-    table_rows = []
-    for r in sorted(records, key=lambda x: x["set_number"]):
-        zustand_flag = "neu" if r["zustand_neu"] else "gebraucht"
-        zustand_label = "Neu / OVP" if r["zustand_neu"] else "Gebraucht"
-        table_rows.append(
-            f"""<tr data-name="{html.escape(r['name'].lower())}" data-theme="{html.escape(r['theme'])}"
-                     data-zustand="{zustand_flag}" data-status="{r['status']}">
-                <td>{html.escape(r['identifier'])}</td>
-                <td>{html.escape(r['name'])}</td>
-                <td>{html.escape(r['theme'])}</td>
-                <td>{zustand_label}</td>
-                <td>{r['year'] or '—'}</td>
-                <td>{r['num_parts'] or '—'}</td>
-                <td>{r['status_label']}</td>
-                <td>{('CHF ' + r['price']) if r['price'] else '—'}</td>
-            </tr>"""
-        )
-    table_rows = "".join(table_rows)
+    # Kompakte Records fürs Frontend (nur was die Stats-Seite braucht)
+    compact = []
+    for r in records:
+        compact.append({
+            "identifier": r["identifier"],
+            "name": r["name"],
+            "theme": r["theme"],
+            "zustand": "neu" if r["zustand_neu"] else "gebraucht",
+            "year": r["year"] or None,
+            "num_parts": int(r["num_parts"]) if r["num_parts"] else 0,
+            "status": r["status"],
+            "status_label": r["status_label"],
+            "price": r["price"],
+        })
+    records_json = json.dumps(compact, ensure_ascii=False).replace("</", "<\\/")
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -716,24 +692,23 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
 <style>
 {SHARED_CSS}
   .page {{ max-width: 900px; margin: 0 auto; padding: 40px 24px 64px; }}
-  .page h1 {{ font-family: var(--font-display); font-size: clamp(24px, 4vw, 32px); margin: 0 0 24px; }}
-  .stat-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 40px; }}
+  .page h1 {{ font-family: var(--font-display); font-size: clamp(24px, 4vw, 32px); margin: 0 0 8px; }}
+  .page > p.intro {{ color: var(--ink-muted); font-size: 14px; margin: 0 0 24px; }}
+  .stat-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }}
   .stat-card {{ background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }}
   .stat-card .num {{ font-family: var(--font-mono); font-size: 28px; font-weight: 500; display: block; }}
   .stat-card .label {{ font-size: 12px; color: var(--ink-muted); margin-top: 4px; }}
-  .status-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 40px; }}
-  .status-card {{ border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }}
-  .status-card .num {{ font-family: var(--font-mono); font-size: 20px; font-weight: 500; }}
-  .status-card .label {{ font-size: 12px; color: var(--ink-muted); }}
+  .filter-bar {{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }}
+  .filter-bar select, .filter-bar input {{ font-family: var(--font-body); padding: 8px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: var(--bg); color: var(--ink); }}
+  .filter-bar input {{ flex: 1; min-width: 160px; }}
   table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
   th, td {{ text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }}
   th {{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--ink-muted); font-weight: 500; }}
-  h2 {{ font-family: var(--font-display); font-size: 18px; margin: 0 0 12px; }}
-  .table-filter-bar {{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }}
-  .table-filter-bar input, .table-filter-bar select {{ font-family: var(--font-body); padding: 8px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: var(--surface); color: var(--ink); }}
-  .table-filter-bar input {{ flex: 1; min-width: 160px; }}
+  h2 {{ font-family: var(--font-display); font-size: 18px; margin: 32px 0 12px; }}
+  h2:first-of-type {{ margin-top: 0; }}
   .table-stats-line {{ font-size: 12px; color: var(--ink-muted); font-family: var(--font-mono); margin-bottom: 10px; }}
   #fullTable {{ min-width: 640px; }}
+  .empty-note {{ color: var(--ink-muted); font-size: 13px; padding: 16px 0; }}
 </style>
 </head>
 <body>
@@ -741,54 +716,42 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
 
 <main class="page">
   <h1>Statistiken zur Sammlung</h1>
+  <p class="intro">Filtere nach Zustand oder Verkaufsstatus — die Zahlen unten passen sich live an.</p>
 
-  <div class="stat-grid">
-    <div class="stat-card"><span class="num">{total_sets}</span><span class="label">Sets gesamt</span></div>
-    <div class="stat-card"><span class="num">{total_parts:,}</span><span class="label">Teile gesamt</span></div>
-    <div class="stat-card"><span class="num">{n_themes}</span><span class="label">Themenwelten</span></div>
-    <div class="stat-card"><span class="num">{status_counts['verfügbar'] + status_counts['reserviert'] + status_counts['verkauft']}</span><span class="label">Zum Verkauf (gesamt)</span></div>
-  </div>
-
-  <h2>Nach Verkaufsstatus</h2>
-  <div class="status-grid">
-    <div class="status-card"><div class="num">{status_counts['unverkäuflich']}</div><div class="label">Unverkäuflich</div></div>
-    <div class="status-card"><div class="num">{status_counts['verfügbar']}</div><div class="label">Verfügbar</div></div>
-    <div class="status-card"><div class="num">{status_counts['reserviert']}</div><div class="label">Reserviert</div></div>
-    <div class="status-card"><div class="num">{status_counts['verkauft']}</div><div class="label">Verkauft</div></div>
-  </div>
-
-  <h2>Nach Zustand</h2>
-  <div class="status-grid">
-    <div class="status-card"><div class="num">{zustand_counts['neu']}</div><div class="label">Neu / OVP</div></div>
-    <div class="status-card"><div class="num">{zustand_counts['gebraucht']}</div><div class="label">Gebraucht</div></div>
-  </div>
-
-  <h2>Nach Themenwelt</h2>
-  <table>
-    <thead><tr><th>Theme</th><th>Sets</th><th>Teile</th></tr></thead>
-    <tbody>{theme_rows}</tbody>
-  </table>
-
-  <h2 style="margin-top: 40px;">Alle Sets</h2>
-  <div class="table-filter-bar">
-    <input type="text" id="tableSearch" placeholder="Set suchen…">
-    <select id="tableThemeFilter">
-      <option value="">Alle Themen</option>
-      {theme_filter_options}
-    </select>
-    <select id="tableZustandFilter">
+  <div class="filter-bar">
+    <input type="text" id="search" placeholder="Set suchen…">
+    <select id="zustandFilter">
       <option value="">Neu &amp; Gebraucht</option>
       <option value="neu">Neu / OVP</option>
       <option value="gebraucht">Gebraucht</option>
     </select>
-    <select id="tableStatusFilter">
+    <select id="statusFilter">
       <option value="">Alle Status</option>
       <option value="unverkäuflich">Unverkäuflich</option>
       <option value="verfügbar">Verfügbar</option>
       <option value="reserviert">Reserviert</option>
       <option value="verkauft">Verkauft</option>
     </select>
+    <select id="themeFilter">
+      <option value="">Alle Themen</option>
+      {theme_filter_options}
+    </select>
   </div>
+
+  <div class="stat-grid" id="statGrid">
+    <div class="stat-card"><span class="num" id="statSets">0</span><span class="label">Sets (gefiltert)</span></div>
+    <div class="stat-card"><span class="num" id="statParts">0</span><span class="label">Teile (gefiltert)</span></div>
+    <div class="stat-card"><span class="num" id="statThemes">0</span><span class="label">Themenwelten (gefiltert)</span></div>
+  </div>
+
+  <h2>Nach Themenwelt</h2>
+  <table>
+    <thead><tr><th>Theme</th><th>Sets</th><th>Teile</th></tr></thead>
+    <tbody id="themeTableBody"></tbody>
+  </table>
+  <p class="empty-note" id="themeEmptyNote" style="display:none;">Keine Sets für diese Filterkombination.</p>
+
+  <h2>Alle Sets (gefiltert)</h2>
   <div class="table-stats-line" id="tableStats"></div>
   <div style="overflow-x:auto;">
   <table id="fullTable">
@@ -798,43 +761,73 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
         <th>Jahr</th><th>Teile</th><th>Status</th><th>Preis</th>
       </tr>
     </thead>
-    <tbody>{table_rows}</tbody>
+    <tbody id="fullTableBody"></tbody>
   </table>
   </div>
 </main>
 
 <script>
-  (function() {{
-    const search = document.getElementById('tableSearch');
-    const themeFilter = document.getElementById('tableThemeFilter');
-    const zustandFilter = document.getElementById('tableZustandFilter');
-    const statusFilter = document.getElementById('tableStatusFilter');
-    const rows = Array.from(document.querySelectorAll('#fullTable tbody tr'));
-    const stats = document.getElementById('tableStats');
+  const RECORDS = {records_json};
 
-    function applyFilters() {{
-      const q = search.value.toLowerCase();
-      const theme = themeFilter.value;
-      const zustand = zustandFilter.value;
-      const status = statusFilter.value;
-      let visible = 0;
-      rows.forEach(r => {{
-        const show = r.dataset.name.includes(q)
-          && (!theme || r.dataset.theme === theme)
-          && (!zustand || r.dataset.zustand === zustand)
-          && (!status || r.dataset.status === status);
-        r.style.display = show ? '' : 'none';
-        if (show) visible++;
-      }});
-      stats.textContent = visible + ' von ' + rows.length + ' Sets angezeigt';
-    }}
+  const search = document.getElementById('search');
+  const zustandFilter = document.getElementById('zustandFilter');
+  const statusFilter = document.getElementById('statusFilter');
+  const themeFilter = document.getElementById('themeFilter');
 
-    search.addEventListener('input', applyFilters);
-    themeFilter.addEventListener('change', applyFilters);
-    zustandFilter.addEventListener('change', applyFilters);
-    statusFilter.addEventListener('change', applyFilters);
-    applyFilters();
-  }})();
+  const statSets = document.getElementById('statSets');
+  const statParts = document.getElementById('statParts');
+  const statThemes = document.getElementById('statThemes');
+  const themeTableBody = document.getElementById('themeTableBody');
+  const themeEmptyNote = document.getElementById('themeEmptyNote');
+  const fullTableBody = document.getElementById('fullTableBody');
+  const tableStats = document.getElementById('tableStats');
+
+  function applyFilters() {{
+    const q = search.value.toLowerCase();
+    const zustand = zustandFilter.value;
+    const status = statusFilter.value;
+    const theme = themeFilter.value;
+
+    const filtered = RECORDS.filter(r =>
+      r.name.toLowerCase().includes(q)
+      && (!zustand || r.zustand === zustand)
+      && (!status || r.status === status)
+      && (!theme || r.theme === theme)
+    );
+
+    // Kennzahlen
+    statSets.textContent = filtered.length;
+    statParts.textContent = filtered.reduce((sum, r) => sum + r.num_parts, 0).toLocaleString('de-CH');
+    statThemes.textContent = new Set(filtered.map(r => r.theme)).size;
+
+    // Themenwelt-Aggregation
+    const byTheme = {{}};
+    filtered.forEach(r => {{
+      if (!byTheme[r.theme]) byTheme[r.theme] = {{ count: 0, parts: 0 }};
+      byTheme[r.theme].count += 1;
+      byTheme[r.theme].parts += r.num_parts;
+    }});
+    const themeRows = Object.entries(byTheme).sort((a, b) => b[1].count - a[1].count);
+    themeTableBody.innerHTML = themeRows.map(([t, v]) =>
+      '<tr><td>' + t + '</td><td>' + v.count + '</td><td>' + v.parts.toLocaleString('de-CH') + '</td></tr>'
+    ).join('');
+    themeEmptyNote.style.display = themeRows.length === 0 ? 'block' : 'none';
+
+    // Volle Tabelle
+    fullTableBody.innerHTML = filtered.map(r =>
+      '<tr><td>' + r.identifier + '</td><td>' + r.name + '</td><td>' + r.theme + '</td>' +
+      '<td>' + (r.zustand === 'neu' ? 'Neu / OVP' : 'Gebraucht') + '</td>' +
+      '<td>' + (r.year || '—') + '</td><td>' + (r.num_parts || '—') + '</td>' +
+      '<td>' + r.status_label + '</td><td>' + (r.price ? 'CHF ' + r.price : '—') + '</td></tr>'
+    ).join('');
+    tableStats.textContent = filtered.length + ' von ' + RECORDS.length + ' Sets angezeigt';
+  }}
+
+  search.addEventListener('input', applyFilters);
+  zustandFilter.addEventListener('change', applyFilters);
+  statusFilter.addEventListener('change', applyFilters);
+  themeFilter.addEventListener('change', applyFilters);
+  applyFilters();
 </script>
 
 {render_footer()}
