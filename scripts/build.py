@@ -292,10 +292,12 @@ def render_card(rec: dict) -> str:
 
     data_json = html.escape(json.dumps(rec, ensure_ascii=False), quote=True)
     forsale_flag = "0" if rec["status"] == "unverkäuflich" else "1"
+    zustand_flag = "neu" if rec["zustand_neu"] else "gebraucht"
 
     return f"""
         <article class="card" tabindex="0" role="button" aria-label="Details zu {html.escape(rec['name'])}"
                  data-theme="{html.escape(rec['theme'])}" data-status="{rec['status']}" data-forsale="{forsale_flag}"
+                 data-zustand="{zustand_flag}"
                  data-name="{html.escape(rec['name'].lower())}" data-set='{data_json}'>
           <div class="img-wrap">
             <img src="{rec['img']}" alt="{html.escape(rec['name'])}" loading="lazy" onerror="this.parentElement.classList.add('img-fallback')">
@@ -390,6 +392,7 @@ CARD_SCRIPT = """
   const search = document.getElementById('search');
   const themeFilter = document.getElementById('themeFilter');
   const statusFilter = document.getElementById('statusFilter');
+  const zustandFilter = document.getElementById('zustandFilter');
   const cards = Array.from(document.querySelectorAll('.card'));
   const stats = document.getElementById('stats');
   const emptyState = document.getElementById('emptyState');
@@ -398,6 +401,7 @@ CARD_SCRIPT = """
     const q = search.value.toLowerCase();
     const theme = themeFilter.value;
     const status = statusFilter.value;
+    const zustand = zustandFilter.value;
     let visible = 0;
     cards.forEach(c => {
       let statusMatch = true;
@@ -405,6 +409,7 @@ CARD_SCRIPT = """
       else if (status) statusMatch = c.dataset.status === status;
       const show = c.dataset.name.includes(q)
         && (!theme || c.dataset.theme === theme)
+        && (!zustand || c.dataset.zustand === zustand)
         && statusMatch;
       c.style.display = show ? '' : 'none';
       if (show) visible++;
@@ -422,6 +427,7 @@ CARD_SCRIPT = """
   search.addEventListener('input', applyFilters);
   themeFilter.addEventListener('change', applyFilters);
   statusFilter.addEventListener('change', applyFilters);
+  zustandFilter.addEventListener('change', applyFilters);
   applyFilters();
 
   const overlay = document.getElementById('modalOverlay');
@@ -529,6 +535,11 @@ def build_html(df: pd.DataFrame, cache: dict) -> str:
       <option value="verfügbar">Verfügbar</option>
       <option value="reserviert">Reserviert</option>
       <option value="verkauft">Verkauft</option>
+    </select>
+    <select id="zustandFilter">
+      <option value="">Neu &amp; Gebraucht</option>
+      <option value="neu">Neu / OVP</option>
+      <option value="gebraucht">Gebraucht</option>
     </select>
   </div>
 </div>
