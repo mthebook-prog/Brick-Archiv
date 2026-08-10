@@ -1619,6 +1619,24 @@
     "theme_id": 158,
     "year": 2024
   },
+  "75379-1": {
+    "fetched_at": 1786391440,
+    "name": "R2-D2",
+    "num_parts": 1050,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75379-1/136905.jpg",
+    "set_url": "https://rebrickable.com/sets/75379-1/r2-d2/",
+    "theme_id": 158,
+    "year": 2024
+  },
+  "75380-1": {
+    "fetched_at": 1786391441,
+    "name": "Mos Espa Podrace",
+    "num_parts": 719,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75380-1/139282.jpg",
+    "set_url": "https://rebrickable.com/sets/75380-1/mos-espa-podrace/",
+    "theme_id": 158,
+    "year": 2024
+  },
   "75381-1": {
     "fetched_at": 1786389436,
     "name": "Droideka",
