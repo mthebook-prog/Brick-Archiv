@@ -43,6 +43,8 @@ jobs:
         with:
           commit_message: "Auto: API-Cache aktualisiert"
           file_pattern: data/api_cache.json
+          skip_fetch: false
+          push_options: "--force-with-lease"
 
       - name: Pages-Artefakt vorbereiten
         uses: actions/upload-pages-artifact@v3
