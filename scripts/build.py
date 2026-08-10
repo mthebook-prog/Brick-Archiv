@@ -187,28 +187,38 @@ def fetch_set_data(set_num: str) -> dict | None:
         return None
     url = f"{API_BASE}/sets/{set_num}/"
     headers = {"Authorization": f"key {API_KEY}"}
-    try:
-        resp = requests.get(url, headers=headers, timeout=15)
-        if resp.status_code == 200:
-            data = resp.json()
-            return {
-                "name": data.get("name"),
-                "year": data.get("year"),
-                "num_parts": data.get("num_parts"),
-                "set_img_url": data.get("set_img_url"),
-                "set_url": data.get("set_url"),
-                "theme_id": data.get("theme_id"),
-                "fetched_at": int(time.time()),
-            }
-        elif resp.status_code == 404:
-            print(f"  Set {set_num} nicht bei Rebrickable gefunden (404)", file=sys.stderr)
-            return {"error": "not_found", "fetched_at": int(time.time())}
-        else:
-            print(f"  Fehler {resp.status_code} bei Set {set_num}", file=sys.stderr)
+
+    for attempt in range(4):
+        try:
+            resp = requests.get(url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                data = resp.json()
+                return {
+                    "name": data.get("name"),
+                    "year": data.get("year"),
+                    "num_parts": data.get("num_parts"),
+                    "set_img_url": data.get("set_img_url"),
+                    "set_url": data.get("set_url"),
+                    "theme_id": data.get("theme_id"),
+                    "fetched_at": int(time.time()),
+                }
+            elif resp.status_code == 404:
+                print(f"  Set {set_num} nicht bei Rebrickable gefunden (404)", file=sys.stderr)
+                return {"error": "not_found", "fetched_at": int(time.time())}
+            elif resp.status_code == 429:
+                wait = 5 * (attempt + 1)
+                print(f"  Rate-Limit erreicht bei {set_num}, warte {wait}s (Versuch {attempt + 1}/4)...", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            else:
+                print(f"  Fehler {resp.status_code} bei Set {set_num}", file=sys.stderr)
+                return None
+        except requests.RequestException as e:
+            print(f"  Netzwerkfehler bei Set {set_num}: {e}", file=sys.stderr)
             return None
-    except requests.RequestException as e:
-        print(f"  Netzwerkfehler bei Set {set_num}: {e}", file=sys.stderr)
-        return None
+
+    print(f"  Set {set_num}: nach mehreren Versuchen weiterhin Rate-Limit, überspringe für diesen Lauf.", file=sys.stderr)
+    return None
 
 
 def fetch_theme_name(theme_id, cache: dict) -> str | None:
@@ -227,10 +237,14 @@ def fetch_theme_name(theme_id, cache: dict) -> str | None:
         if resp.status_code == 200:
             data = resp.json()
             cache[key] = {"name": data.get("name"), "fetched_at": int(time.time())}
-            time.sleep(0.1)
+            time.sleep(1.1)
             return cache[key]["name"]
+        elif resp.status_code == 429:
+            time.sleep(5)
+            return None
         else:
             cache[key] = {"error": f"http_{resp.status_code}", "fetched_at": int(time.time())}
+            time.sleep(1.1)
             return None
     except requests.RequestException:
         return None
@@ -291,7 +305,7 @@ def enrich_data(df: pd.DataFrame, cache: dict) -> dict:
         if result is not None:
             cache[set_num] = result
             new_calls += 1
-            time.sleep(0.2)
+        time.sleep(1.1)  # Rebrickable erlaubt im Schnitt ~1 Anfrage/Sekunde
 
     # Theme-Namen für alle vorkommenden theme_ids auflösen
     theme_ids = set()
