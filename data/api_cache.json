@@ -1,1 +1,542 @@
-{}
+{
+  "10134-1": {
+    "fetched_at": 1786391687,
+    "name": "Y-wing Attack Starfighter",
+    "num_parts": 1490,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10134-1/120203.jpg",
+    "set_url": "https://rebrickable.com/sets/10134-1/y-wing-attack-starfighter/",
+    "theme_id": 171,
+    "year": 2004
+  },
+  "10188-1": {
+    "fetched_at": 1786391687,
+    "name": "Death Star",
+    "num_parts": 3807,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10188-1/52658.jpg",
+    "set_url": "https://rebrickable.com/sets/10188-1/death-star/",
+    "theme_id": 171,
+    "year": 2008
+  },
+  "10212-1": {
+    "fetched_at": 1786391688,
+    "name": "Imperial Shuttle",
+    "num_parts": 2503,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10212-1/9483.jpg",
+    "set_url": "https://rebrickable.com/sets/10212-1/imperial-shuttle/",
+    "theme_id": 171,
+    "year": 2010
+  },
+  "10214-1": {
+    "fetched_at": 1786391688,
+    "name": "Tower Bridge",
+    "num_parts": 4295,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10214-1/14563.jpg",
+    "set_url": "https://rebrickable.com/sets/10214-1/tower-bridge/",
+    "theme_id": 673,
+    "year": 2010
+  },
+  "10220-1": {
+    "fetched_at": 1786391689,
+    "name": "Volkswagen T1 Camper Van",
+    "num_parts": 1332,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10220-1/49899.jpg",
+    "set_url": "https://rebrickable.com/sets/10220-1/volkswagen-t1-camper-van/",
+    "theme_id": 673,
+    "year": 2011
+  },
+  "10221-1": {
+    "fetched_at": 1786391689,
+    "name": "Super Star Destroyer",
+    "num_parts": 3152,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10221-1/7435.jpg",
+    "set_url": "https://rebrickable.com/sets/10221-1/super-star-destroyer/",
+    "theme_id": 171,
+    "year": 2011
+  },
+  "10226-1": {
+    "fetched_at": 1786391689,
+    "name": "Sopwith Camel",
+    "num_parts": 879,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10226-1/15895.jpg",
+    "set_url": "https://rebrickable.com/sets/10226-1/sopwith-camel/",
+    "theme_id": 673,
+    "year": 2012
+  },
+  "10234-1": {
+    "fetched_at": 1786391690,
+    "name": "Sydney Opera House",
+    "num_parts": 2989,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10234-1/15850.jpg",
+    "set_url": "https://rebrickable.com/sets/10234-1/sydney-opera-house/",
+    "theme_id": 673,
+    "year": 2013
+  },
+  "10253-1": {
+    "fetched_at": 1786391690,
+    "name": "Big Ben",
+    "num_parts": 4167,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10253-1/10737.jpg",
+    "set_url": "https://rebrickable.com/sets/10253-1/big-ben/",
+    "theme_id": 673,
+    "year": 2016
+  },
+  "10256-1": {
+    "fetched_at": 1786391690,
+    "name": "Taj Mahal",
+    "num_parts": 5923,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10256-1/10681.jpg",
+    "set_url": "https://rebrickable.com/sets/10256-1/taj-mahal/",
+    "theme_id": 673,
+    "year": 2017
+  },
+  "10258-1": {
+    "fetched_at": 1786391691,
+    "name": "London Bus",
+    "num_parts": 1686,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10258-1/17200.jpg",
+    "set_url": "https://rebrickable.com/sets/10258-1/london-bus/",
+    "theme_id": 673,
+    "year": 2017
+  },
+  "10261-1": {
+    "fetched_at": 1786391691,
+    "name": "Roller Coaster",
+    "num_parts": 4124,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10261-1/10715.jpg",
+    "set_url": "https://rebrickable.com/sets/10261-1/roller-coaster/",
+    "theme_id": 673,
+    "year": 2018
+  },
+  "10262-1": {
+    "fetched_at": 1786391692,
+    "name": "James Bond Aston Martin DB5",
+    "num_parts": 1297,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10262-1/10822.jpg",
+    "set_url": "https://rebrickable.com/sets/10262-1/james-bond-aston-martin-db5/",
+    "theme_id": 673,
+    "year": 2018
+  },
+  "10263-1": {
+    "fetched_at": 1786391692,
+    "name": "Winter Village Fire Station",
+    "num_parts": 1166,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10263-1/13339.jpg",
+    "set_url": "https://rebrickable.com/sets/10263-1/winter-village-fire-station/",
+    "theme_id": 228,
+    "year": 2018
+  },
+  "10265-1": {
+    "fetched_at": 1786391692,
+    "name": "Ford Mustang",
+    "num_parts": 1471,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10265-1/15531.jpg",
+    "set_url": "https://rebrickable.com/sets/10265-1/ford-mustang/",
+    "theme_id": 673,
+    "year": 2019
+  },
+  "10266-1": {
+    "fetched_at": 1786391693,
+    "name": "NASA Apollo 11 Lunar Lander",
+    "num_parts": 1087,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10266-1/22279.jpg",
+    "set_url": "https://rebrickable.com/sets/10266-1/nasa-apollo-11-lunar-lander/",
+    "theme_id": 673,
+    "year": 2019
+  },
+  "10267-1": {
+    "fetched_at": 1786391693,
+    "name": "Gingerbread House",
+    "num_parts": 1477,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10267-1/13993.jpg",
+    "set_url": "https://rebrickable.com/sets/10267-1/gingerbread-house/",
+    "theme_id": 228,
+    "year": 2019
+  },
+  "10272-1": {
+    "fetched_at": 1786391693,
+    "name": "Old Trafford - Manchester United",
+    "num_parts": 3898,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10272-1/19144.jpg",
+    "set_url": "https://rebrickable.com/sets/10272-1/old-trafford-manchester-united/",
+    "theme_id": 673,
+    "year": 2020
+  },
+  "10274-1": {
+    "fetched_at": 1786391694,
+    "name": "ECTO-1",
+    "num_parts": 2352,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10274-1/75167.jpg",
+    "set_url": "https://rebrickable.com/sets/10274-1/ecto-1/",
+    "theme_id": 721,
+    "year": 2020
+  },
+  "10275-1": {
+    "fetched_at": 1786391694,
+    "name": "Elf Club House",
+    "num_parts": 1197,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10275-1/72761.jpg",
+    "set_url": "https://rebrickable.com/sets/10275-1/elf-club-house/",
+    "theme_id": 227,
+    "year": 2020
+  },
+  "10276-1": {
+    "fetched_at": 1786391694,
+    "name": "Colosseum",
+    "num_parts": 9036,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10276-1/75458.jpg",
+    "set_url": "https://rebrickable.com/sets/10276-1/colosseum/",
+    "theme_id": 721,
+    "year": 2020
+  },
+  "10277-1": {
+    "fetched_at": 1786391695,
+    "name": "Crocodile Locomotive",
+    "num_parts": 1279,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10277-1/68072.jpg",
+    "set_url": "https://rebrickable.com/sets/10277-1/crocodile-locomotive/",
+    "theme_id": 721,
+    "year": 2020
+  },
+  "10279-1": {
+    "fetched_at": 1786391695,
+    "name": "Volkswagen T2 Camper Van",
+    "num_parts": 2207,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10279-1/90250.jpg",
+    "set_url": "https://rebrickable.com/sets/10279-1/volkswagen-t2-camper-van/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10282-1": {
+    "fetched_at": 1786391695,
+    "name": "adidas Originals Superstar",
+    "num_parts": 731,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10282-1/89213.jpg",
+    "set_url": "https://rebrickable.com/sets/10282-1/adidas-originals-superstar/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10284-1": {
+    "fetched_at": 1786391696,
+    "name": "Camp Nou - FC Barcelona",
+    "num_parts": 5509,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10284-1/91438.jpg",
+    "set_url": "https://rebrickable.com/sets/10284-1/camp-nou-fc-barcelona/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10289-1": {
+    "fetched_at": 1786391696,
+    "name": "Bird of Paradise",
+    "num_parts": 1173,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10289-1/148038.jpg",
+    "set_url": "https://rebrickable.com/sets/10289-1/bird-of-paradise/",
+    "theme_id": 769,
+    "year": 2021
+  },
+  "10290-1": {
+    "fetched_at": 1786391697,
+    "name": "Pickup Truck",
+    "num_parts": 1678,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10290-1/89658.jpg",
+    "set_url": "https://rebrickable.com/sets/10290-1/pickup-truck/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10292-1": {
+    "fetched_at": 1786391697,
+    "name": "Friends - The Apartments",
+    "num_parts": 2048,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10292-1/87039.jpg",
+    "set_url": "https://rebrickable.com/sets/10292-1/friends-the-apartments/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10293-1": {
+    "fetched_at": 1786391698,
+    "name": "Santa's Visit",
+    "num_parts": 1445,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10293-1/92322.jpg",
+    "set_url": "https://rebrickable.com/sets/10293-1/santas-visit/",
+    "theme_id": 227,
+    "year": 2021
+  },
+  "10294-1": {
+    "fetched_at": 1786391698,
+    "name": "Titanic",
+    "num_parts": 9092,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10294-1/93446.jpg",
+    "set_url": "https://rebrickable.com/sets/10294-1/titanic/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10295-1": {
+    "fetched_at": 1786391699,
+    "name": "Porsche 911 Turbo & 911 Targa",
+    "num_parts": 1458,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10295-1/81022.jpg",
+    "set_url": "https://rebrickable.com/sets/10295-1/porsche-911-turbo-911-targa/",
+    "theme_id": 721,
+    "year": 2021
+  },
+  "10299-1": {
+    "fetched_at": 1786391699,
+    "name": "Real Madrid – Santiago Bernabéu Stadium",
+    "num_parts": 5876,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10299-1/98813.jpg",
+    "set_url": "https://rebrickable.com/sets/10299-1/real-madrid-santiago-bernabéu-stadium/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10300-1": {
+    "fetched_at": 1786391699,
+    "name": "Back to the Future Time Machine",
+    "num_parts": 1872,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10300-1/99954.jpg",
+    "set_url": "https://rebrickable.com/sets/10300-1/back-to-the-future-time-machine/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10302-1": {
+    "fetched_at": 1786391700,
+    "name": "Optimus Prime",
+    "num_parts": 1508,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10302-1/102780.jpg",
+    "set_url": "https://rebrickable.com/sets/10302-1/optimus-prime/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10303-1": {
+    "fetched_at": 1786391700,
+    "name": "Loop Coaster",
+    "num_parts": 3756,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10303-1/141978.jpg",
+    "set_url": "https://rebrickable.com/sets/10303-1/loop-coaster/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10304-1": {
+    "fetched_at": 1786391700,
+    "name": "Chevrolet Camaro Z/28 1969",
+    "num_parts": 1456,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10304-1/104897.jpg",
+    "set_url": "https://rebrickable.com/sets/10304-1/chevrolet-camaro-z28-1969/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10306-1": {
+    "fetched_at": 1786391701,
+    "name": "Atari 2600",
+    "num_parts": 2532,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10306-1/105658.jpg",
+    "set_url": "https://rebrickable.com/sets/10306-1/atari-2600/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10307-1": {
+    "fetched_at": 1786391701,
+    "name": "Eiffel Tower",
+    "num_parts": 10001,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10307-1/112417.jpg",
+    "set_url": "https://rebrickable.com/sets/10307-1/eiffel-tower/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "10308-1": {
+    "fetched_at": 1786391701,
+    "name": "Holiday Main Street",
+    "num_parts": 1516,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10308-1/110146.jpg",
+    "set_url": "https://rebrickable.com/sets/10308-1/holiday-main-street/",
+    "theme_id": 227,
+    "year": 2022
+  },
+  "10315-1": {
+    "fetched_at": 1786391702,
+    "name": "Tranquil Garden",
+    "num_parts": 1363,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10315-1/132380.jpg",
+    "set_url": "https://rebrickable.com/sets/10315-1/tranquil-garden/",
+    "theme_id": 721,
+    "year": 2023
+  },
+  "10320-1": {
+    "fetched_at": 1786391702,
+    "name": "Eldorado Fortress",
+    "num_parts": 2509,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10320-1/127861.jpg",
+    "set_url": "https://rebrickable.com/sets/10320-1/eldorado-fortress/",
+    "theme_id": 721,
+    "year": 2023
+  },
+  "10325-1": {
+    "fetched_at": 1786391703,
+    "name": "Alpine Lodge",
+    "num_parts": 1517,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10325-1/127993.jpg",
+    "set_url": "https://rebrickable.com/sets/10325-1/alpine-lodge/",
+    "theme_id": 227,
+    "year": 2023
+  },
+  "10330-1": {
+    "fetched_at": 1786391703,
+    "name": "McLaren MP4/4 & Ayrton Senna",
+    "num_parts": 693,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10330-1/137114.jpg",
+    "set_url": "https://rebrickable.com/sets/10330-1/mclaren-mp44-ayrton-senna/",
+    "theme_id": 721,
+    "year": 2024
+  },
+  "10331-1": {
+    "fetched_at": 1786391703,
+    "name": "Kingfisher Bird",
+    "num_parts": 834,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10331-1/135670.jpg",
+    "set_url": "https://rebrickable.com/sets/10331-1/kingfisher-bird/",
+    "theme_id": 721,
+    "year": 2024
+  },
+  "10335-1": {
+    "fetched_at": 1786391704,
+    "name": "The Endurance",
+    "num_parts": 3011,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10335-1/147505.jpg",
+    "set_url": "https://rebrickable.com/sets/10335-1/the-endurance/",
+    "theme_id": 721,
+    "year": 2024
+  },
+  "10338-1": {
+    "fetched_at": 1786391704,
+    "name": "Bumblebee",
+    "num_parts": 950,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10338-1/141728.jpg",
+    "set_url": "https://rebrickable.com/sets/10338-1/bumblebee/",
+    "theme_id": 721,
+    "year": 2024
+  },
+  "10497-1": {
+    "fetched_at": 1786391704,
+    "name": "Galaxy Explorer",
+    "num_parts": 1254,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/10497-1/104009.jpg",
+    "set_url": "https://rebrickable.com/sets/10497-1/galaxy-explorer/",
+    "theme_id": 721,
+    "year": 2022
+  },
+  "11021-1": {
+    "fetched_at": 1786391705,
+    "name": "90 Years of Play",
+    "num_parts": 1100,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/11021-1/100404.jpg",
+    "set_url": "https://rebrickable.com/sets/11021-1/90-years-of-play/",
+    "theme_id": 621,
+    "year": 2022
+  },
+  "21033-1": {
+    "fetched_at": 1786391705,
+    "name": "Chicago",
+    "num_parts": 444,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21033-1/15369.jpg",
+    "set_url": "https://rebrickable.com/sets/21033-1/chicago/",
+    "theme_id": 253,
+    "year": 2017
+  },
+  "21037-1": {
+    "fetched_at": 1786391705,
+    "name": "LEGO House",
+    "num_parts": 774,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21037-1/13756.jpg",
+    "set_url": "https://rebrickable.com/sets/21037-1/lego-house/",
+    "theme_id": 252,
+    "year": 2017
+  },
+  "21038-1": {
+    "fetched_at": 1786391706,
+    "name": "Las Vegas",
+    "num_parts": 487,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21038-1/16548.jpg",
+    "set_url": "https://rebrickable.com/sets/21038-1/las-vegas/",
+    "theme_id": 253,
+    "year": 2017
+  },
+  "21042-1": {
+    "fetched_at": 1786391706,
+    "name": "Statue of Liberty",
+    "num_parts": 1685,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21042-1/13289.jpg",
+    "set_url": "https://rebrickable.com/sets/21042-1/statue-of-liberty/",
+    "theme_id": 252,
+    "year": 2018
+  },
+  "21043-1": {
+    "fetched_at": 1786391707,
+    "name": "San Francisco",
+    "num_parts": 565,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21043-1/15526.jpg",
+    "set_url": "https://rebrickable.com/sets/21043-1/san-francisco/",
+    "theme_id": 253,
+    "year": 2019
+  },
+  "21045-1": {
+    "fetched_at": 1786391707,
+    "name": "Trafalgar Square",
+    "num_parts": 1197,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21045-1/17334.jpg",
+    "set_url": "https://rebrickable.com/sets/21045-1/trafalgar-square/",
+    "theme_id": 252,
+    "year": 2019
+  },
+  "21046-1": {
+    "fetched_at": 1786391707,
+    "name": "Empire State Building",
+    "num_parts": 1767,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21046-1/22370.jpg",
+    "set_url": "https://rebrickable.com/sets/21046-1/empire-state-building/",
+    "theme_id": 252,
+    "year": 2019
+  },
+  "21054-1": {
+    "fetched_at": 1786391708,
+    "name": "The White House",
+    "num_parts": 1483,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21054-1/64201.jpg",
+    "set_url": "https://rebrickable.com/sets/21054-1/the-white-house/",
+    "theme_id": 252,
+    "year": 2020
+  },
+  "21056-1": {
+    "fetched_at": 1786391708,
+    "name": "Taj Mahal",
+    "num_parts": 2024,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21056-1/88317.jpg",
+    "set_url": "https://rebrickable.com/sets/21056-1/taj-mahal/",
+    "theme_id": 252,
+    "year": 2021
+  },
+  "21057-1": {
+    "fetched_at": 1786391708,
+    "name": "Singapore",
+    "num_parts": 830,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21057-1/95276.jpg",
+    "set_url": "https://rebrickable.com/sets/21057-1/singapore/",
+    "theme_id": 253,
+    "year": 2022
+  },
+  "21058-1": {
+    "fetched_at": 1786391709,
+    "name": "Great Pyramid of Giza",
+    "num_parts": 1476,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21058-1/102703.jpg",
+    "set_url": "https://rebrickable.com/sets/21058-1/great-pyramid-of-giza/",
+    "theme_id": 252,
+    "year": 2022
+  },
+  "21226-1": {
+    "fetched_at": 1786391709,
+    "name": "Art Project - Create Together",
+    "num_parts": 4138,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/21226-1/93814.jpg",
+    "set_url": "https://rebrickable.com/sets/21226-1/art-project-create-together/",
+    "theme_id": 709,
+    "year": 2021
+  }
+}
