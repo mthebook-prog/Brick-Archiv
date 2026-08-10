@@ -31,10 +31,12 @@ STATS_HTML = OUTPUT_DIR / "stats.html"
 API_KEY = os.environ.get("REBRICKABLE_API_KEY")
 API_BASE = "https://rebrickable.com/api/v3/lego"
 
-REQUIRED_COLUMNS = [
-    "Identifier", "Set Number", "Name", "ID", "THEME", "Anzahl",
-    "Zustand", "Bauanleitung", "Original-Karton",
+REQUIRED_COLUMNS = ["Set Number", "Zustand"]
+OPTIONAL_COLUMNS = [
+    "Identifier", "Name", "ID", "THEME", "Anzahl",
+    "Bauanleitung", "Original-Karton", "Verkaufsstatus", "Preis",
 ]
+THEME_CACHE_PREFIX = "theme:"
 
 STATUS_LABELS = {
     "unverkäuflich": "Unverkäuflich",
@@ -209,6 +211,64 @@ def fetch_set_data(set_num: str) -> dict | None:
         return None
 
 
+def fetch_theme_name(theme_id, cache: dict) -> str | None:
+    """Löst eine Theme-ID über die Rebrickable-API in einen Klartextnamen auf (gecacht)."""
+    if theme_id is None or pd.isna(theme_id):
+        return None
+    key = f"{THEME_CACHE_PREFIX}{int(theme_id)}"
+    if key in cache and "error" not in cache[key]:
+        return cache[key].get("name")
+    if not API_KEY:
+        return None
+    url = f"{API_BASE}/themes/{int(theme_id)}/"
+    headers = {"Authorization": f"key {API_KEY}"}
+    try:
+        resp = requests.get(url, headers=headers, timeout=15)
+        if resp.status_code == 200:
+            data = resp.json()
+            cache[key] = {"name": data.get("name"), "fetched_at": int(time.time())}
+            time.sleep(0.1)
+            return cache[key]["name"]
+        else:
+            cache[key] = {"error": f"http_{resp.status_code}", "fetched_at": int(time.time())}
+            return None
+    except requests.RequestException:
+        return None
+
+
+def assign_missing_identifiers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Vergibt automatisch einen Identifier ({Set Number}-N) für Zeilen, bei denen
+    die Identifier-Spalte leer gelassen wurde. So reicht beim Hinzufügen eines
+    neuen Sets die reine Set-Nummer.
+    """
+    df = df.copy()
+    if "Identifier" not in df.columns:
+        df["Identifier"] = pd.NA
+
+    used_per_set = {}
+    for idx, row in df.iterrows():
+        ident = row.get("Identifier")
+        set_num = str(row["Set Number"])
+        if pd.notna(ident) and str(ident).strip():
+            used_per_set.setdefault(set_num, set()).add(str(ident).strip())
+
+    for idx, row in df.iterrows():
+        ident = row.get("Identifier")
+        if pd.notna(ident) and str(ident).strip():
+            continue
+        set_num = str(row["Set Number"])
+        taken = used_per_set.setdefault(set_num, set())
+        n = 1
+        while f"{set_num}-{n}" in taken:
+            n += 1
+        new_id = f"{set_num}-{n}"
+        taken.add(new_id)
+        df.at[idx, "Identifier"] = new_id
+
+    return df
+
+
 def real_set_number(row) -> str:
     """
     Ermittelt die tatsächliche Rebrickable-Set-Nummer.
@@ -219,7 +279,7 @@ def real_set_number(row) -> str:
 
 
 def enrich_data(df: pd.DataFrame, cache: dict) -> dict:
-    """Holt für jede eindeutige Set-Nummer die API-Daten (aus Cache oder live)."""
+    """Holt für jede eindeutige Set-Nummer die API-Daten (aus Cache oder live), inkl. Theme-Namen."""
     unique_set_nums = sorted(set(real_set_number(row) for _, row in df.iterrows()))
     new_calls = 0
 
@@ -232,6 +292,15 @@ def enrich_data(df: pd.DataFrame, cache: dict) -> dict:
             cache[set_num] = result
             new_calls += 1
             time.sleep(0.2)
+
+    # Theme-Namen für alle vorkommenden theme_ids auflösen
+    theme_ids = set()
+    for set_num in unique_set_nums:
+        tid = cache.get(set_num, {}).get("theme_id")
+        if tid is not None:
+            theme_ids.add(tid)
+    for tid in theme_ids:
+        fetch_theme_name(tid, cache)
 
     print(f"{new_calls} neue API-Aufrufe, {len(unique_set_nums) - new_calls} aus Cache.")
     return cache
@@ -249,11 +318,21 @@ def build_card_record(row, cache: dict) -> dict:
     preis = row.get("Preis", "")
     has_price = preis not in ("", None) and pd.notna(preis)
 
+    # Name/Theme: primär von der API, Excel nur als Fallback (z.B. falls API-Aufruf fehlschlug)
+    api_name = api.get("name")
+    excel_name = row.get("Name")
+    name = api_name or (str(excel_name) if pd.notna(excel_name) else f"Set {row['Set Number']}")
+
+    theme_id = api.get("theme_id")
+    theme_from_api = cache.get(f"{THEME_CACHE_PREFIX}{int(theme_id)}", {}).get("name") if theme_id is not None else None
+    excel_theme = row.get("THEME")
+    theme = theme_from_api or (str(excel_theme) if pd.notna(excel_theme) else "Unbekannt")
+
     return {
         "identifier": str(row["Identifier"]),
         "set_number": str(row["Set Number"]),
-        "name": str(row["Name"]),
-        "theme": str(row["THEME"]),
+        "name": name,
+        "theme": theme,
         "year": api.get("year", ""),
         "num_parts": api.get("num_parts", ""),
         "img": api.get("set_img_url", ""),
@@ -573,6 +652,10 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
     for r in records:
         status_counts[r["status"]] += 1
 
+    zustand_counts = {"neu": 0, "gebraucht": 0}
+    for r in records:
+        zustand_counts["neu" if r["zustand_neu"] else "gebraucht"] += 1
+
     theme_stats = {}
     for r in records:
         t = theme_stats.setdefault(r["theme"], {"count": 0, "parts": 0})
@@ -583,6 +666,29 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
         f"<tr><td>{html.escape(t)}</td><td>{v['count']}</td><td>{v['parts']:,}</td></tr>"
         for t, v in sorted(theme_stats.items(), key=lambda x: -x[1]["count"])
     )
+
+    theme_filter_options = "".join(
+        f'<option value="{html.escape(t)}">{html.escape(t)}</option>' for t in sorted(theme_stats.keys())
+    )
+
+    table_rows = []
+    for r in sorted(records, key=lambda x: x["set_number"]):
+        zustand_flag = "neu" if r["zustand_neu"] else "gebraucht"
+        zustand_label = "Neu / OVP" if r["zustand_neu"] else "Gebraucht"
+        table_rows.append(
+            f"""<tr data-name="{html.escape(r['name'].lower())}" data-theme="{html.escape(r['theme'])}"
+                     data-zustand="{zustand_flag}" data-status="{r['status']}">
+                <td>{html.escape(r['identifier'])}</td>
+                <td>{html.escape(r['name'])}</td>
+                <td>{html.escape(r['theme'])}</td>
+                <td>{zustand_label}</td>
+                <td>{r['year'] or '—'}</td>
+                <td>{r['num_parts'] or '—'}</td>
+                <td>{r['status_label']}</td>
+                <td>{('CHF ' + r['price']) if r['price'] else '—'}</td>
+            </tr>"""
+        )
+    table_rows = "".join(table_rows)
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -609,6 +715,11 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
   th, td {{ text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }}
   th {{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--ink-muted); font-weight: 500; }}
   h2 {{ font-family: var(--font-display); font-size: 18px; margin: 0 0 12px; }}
+  .table-filter-bar {{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }}
+  .table-filter-bar input, .table-filter-bar select {{ font-family: var(--font-body); padding: 8px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: var(--surface); color: var(--ink); }}
+  .table-filter-bar input {{ flex: 1; min-width: 160px; }}
+  .table-stats-line {{ font-size: 12px; color: var(--ink-muted); font-family: var(--font-mono); margin-bottom: 10px; }}
+  #fullTable {{ min-width: 640px; }}
 </style>
 </head>
 <body>
@@ -632,12 +743,85 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
     <div class="status-card"><div class="num">{status_counts['verkauft']}</div><div class="label">Verkauft</div></div>
   </div>
 
+  <h2>Nach Zustand</h2>
+  <div class="status-grid">
+    <div class="status-card"><div class="num">{zustand_counts['neu']}</div><div class="label">Neu / OVP</div></div>
+    <div class="status-card"><div class="num">{zustand_counts['gebraucht']}</div><div class="label">Gebraucht</div></div>
+  </div>
+
   <h2>Nach Themenwelt</h2>
   <table>
     <thead><tr><th>Theme</th><th>Sets</th><th>Teile</th></tr></thead>
     <tbody>{theme_rows}</tbody>
   </table>
+
+  <h2 style="margin-top: 40px;">Alle Sets</h2>
+  <div class="table-filter-bar">
+    <input type="text" id="tableSearch" placeholder="Set suchen…">
+    <select id="tableThemeFilter">
+      <option value="">Alle Themen</option>
+      {theme_filter_options}
+    </select>
+    <select id="tableZustandFilter">
+      <option value="">Neu &amp; Gebraucht</option>
+      <option value="neu">Neu / OVP</option>
+      <option value="gebraucht">Gebraucht</option>
+    </select>
+    <select id="tableStatusFilter">
+      <option value="">Alle Status</option>
+      <option value="unverkäuflich">Unverkäuflich</option>
+      <option value="verfügbar">Verfügbar</option>
+      <option value="reserviert">Reserviert</option>
+      <option value="verkauft">Verkauft</option>
+    </select>
+  </div>
+  <div class="table-stats-line" id="tableStats"></div>
+  <div style="overflow-x:auto;">
+  <table id="fullTable">
+    <thead>
+      <tr>
+        <th>Identifier</th><th>Name</th><th>Theme</th><th>Zustand</th>
+        <th>Jahr</th><th>Teile</th><th>Status</th><th>Preis</th>
+      </tr>
+    </thead>
+    <tbody>{table_rows}</tbody>
+  </table>
+  </div>
 </main>
+
+<script>
+  (function() {{
+    const search = document.getElementById('tableSearch');
+    const themeFilter = document.getElementById('tableThemeFilter');
+    const zustandFilter = document.getElementById('tableZustandFilter');
+    const statusFilter = document.getElementById('tableStatusFilter');
+    const rows = Array.from(document.querySelectorAll('#fullTable tbody tr'));
+    const stats = document.getElementById('tableStats');
+
+    function applyFilters() {{
+      const q = search.value.toLowerCase();
+      const theme = themeFilter.value;
+      const zustand = zustandFilter.value;
+      const status = statusFilter.value;
+      let visible = 0;
+      rows.forEach(r => {{
+        const show = r.dataset.name.includes(q)
+          && (!theme || r.dataset.theme === theme)
+          && (!zustand || r.dataset.zustand === zustand)
+          && (!status || r.dataset.status === status);
+        r.style.display = show ? '' : 'none';
+        if (show) visible++;
+      }});
+      stats.textContent = visible + ' von ' + rows.length + ' Sets angezeigt';
+    }}
+
+    search.addEventListener('input', applyFilters);
+    themeFilter.addEventListener('change', applyFilters);
+    zustandFilter.addEventListener('change', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+    applyFilters();
+  }})();
+</script>
 
 {render_footer()}
 </body>
@@ -652,8 +836,18 @@ def main():
     df = pd.read_excel(DATA_XLSX)
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
-        print(f"Fehlende Spalten in Excel: {missing}", file=sys.stderr)
+        print(f"Fehlende Pflichtspalten in Excel: {missing}", file=sys.stderr)
         sys.exit(1)
+
+    # Optionale Spalten ergänzen, falls sie (noch) nicht existieren
+    for col in OPTIONAL_COLUMNS:
+        if col not in df.columns:
+            df[col] = pd.NA
+    if "Anzahl" in df.columns:
+        df["Anzahl"] = df["Anzahl"].fillna(1)
+
+    # Fehlende Identifier automatisch vergeben ({Set Number}-N)
+    df = assign_missing_identifiers(df)
 
     cache = load_cache()
     cache = enrich_data(df, cache)
