@@ -1,0 +1,61 @@
+name: Build und Deploy Lego-Sammlung
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/Lego_Liste_bereinigt.xlsx"
+      - "scripts/build.py"
+      - ".github/workflows/build-deploy.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Abhängigkeiten installieren
+        run: pip install -r requirements.txt
+
+      - name: Seite bauen (API-Daten holen + HTML generieren)
+        env:
+          REBRICKABLE_API_KEY: ${{ secrets.REBRICKABLE_API_KEY }}
+        run: python scripts/build.py
+
+      - name: API-Cache zurück ins Repo committen
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto: API-Cache aktualisiert"
+          file_pattern: data/api_cache.json
+
+      - name: Pages-Artefakt vorbereiten
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Nach GitHub Pages deployen
+        id: deployment
+        uses: actions/deploy-pages@v4
