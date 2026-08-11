@@ -39,16 +39,14 @@ OPTIONAL_COLUMNS = [
 THEME_CACHE_PREFIX = "theme:"
 
 STATUS_LABELS = {
-    "unverkäuflich": "Unverkäuflich",
+    "unverkäuflich": "Nicht verfügbar",
     "verfügbar": "Verfügbar",
     "reserviert": "Reserviert",
-    "verkauft": "Verkauft",
 }
 STATUS_CLASS = {
     "unverkäuflich": "status-unsellable",
     "verfügbar": "status-available",
     "reserviert": "status-reserved",
-    "verkauft": "status-sold",
 }
 
 SHARED_CSS = """
@@ -429,7 +427,7 @@ def render_card(rec: dict) -> str:
     zustand_label = "Neu / ungeöffnet" if rec["zustand_neu"] else "Gebraucht / geöffnet"
 
     if rec["status"] == "unverkäuflich":
-        sale_html = '<div class="unsellable-label">Unverkäuflich</div>'
+        sale_html = '<div class="unsellable-label">Nicht verfügbar</div>'
     else:
         price_html = (f'<div class="price">CHF {rec["price"]}</div>'
                        if rec["price"] else '<div class="price price-muted">Preis auf Anfrage</div>')
@@ -439,6 +437,7 @@ def render_card(rec: dict) -> str:
                         "alert('Kauf-Workflow folgt in einem späteren Schritt.')\">"
                         "Zum Verkauf anfragen</button>")
         sale_html = price_html + buy_html
+    sale_html = f'<div class="sale-block">{sale_html}</div>'
 
     badges = []
     if rec["bauanleitung"]:
@@ -450,14 +449,17 @@ def render_card(rec: dict) -> str:
     data_json = html.escape(json.dumps(rec, ensure_ascii=False), quote=True)
     forsale_flag = "0" if rec["status"] == "unverkäuflich" else "1"
     zustand_flag = "neu" if rec["zustand_neu"] else "gebraucht"
+    qty = rec.get("quantity", 1)
+    qty_badge = f'<span class="qty-badge">× {qty}</span>' if qty > 1 else ""
 
     return f"""
         <article class="card" tabindex="0" role="button" aria-label="Details zu {html.escape(rec['name'])}"
                  data-theme="{html.escape(rec['theme'])}" data-status="{rec['status']}" data-forsale="{forsale_flag}"
-                 data-zustand="{zustand_flag}"
+                 data-zustand="{zustand_flag}" data-year="{rec['year'] or ''}" data-parts="{rec['num_parts'] or ''}"
                  data-name="{html.escape(rec['name'].lower())}" data-set='{data_json}'>
           <div class="img-wrap">
             <img src="{rec['img']}" alt="{html.escape(rec['name'])}" loading="lazy" onerror="this.parentElement.classList.add('img-fallback')">
+            {qty_badge}
             <span class="badge {status_class}">{rec['status_label']}</span>
           </div>
           <div class="card-body">
@@ -491,10 +493,10 @@ CARD_CSS = """
   .stats-line { font-size: 12px; color: var(--ink-muted); font-family: var(--font-mono); padding: 10px 24px 0; max-width: 1200px; margin: 0 auto; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; max-width: 1200px; margin: 0 auto; padding: 16px 24px 64px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
   .card:hover { border-color: var(--ink); box-shadow: 0 6px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
   .card:focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; }
-  .img-wrap { position: relative; background: #F1F0EA; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; }
+  .img-wrap { position: relative; background: #F1F0EA; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .img-wrap img { max-width: 82%; max-height: 82%; object-fit: contain; }
   .img-wrap.img-fallback::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(var(--line) 1.5px, transparent 1.5px); background-size: 14px 14px; }
   .badge { position: absolute; top: 10px; right: 10px; font-size: 10px; font-weight: 600; padding: 4px 9px; border-radius: 20px; color: white; text-transform: uppercase; letter-spacing: .03em; }
@@ -502,18 +504,20 @@ CARD_CSS = """
   .status-reserved { background: var(--amber); }
   .status-sold { background: var(--sold); }
   .status-unsellable { background: var(--unsellable); color: #4a473f; }
+  .qty-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 20px; color: white; background: var(--ink); }
 
-  .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .card-top { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
-  .card-body h3 { font-family: var(--font-display); margin: 2px 0 0; font-size: 15px; font-weight: 500; line-height: 1.3; }
-  .theme-tag { font-size: 11px; color: var(--ink-muted); }
+  .card-body h3 { font-family: var(--font-display); margin: 2px 0 0; font-size: 15px; font-weight: 500; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(1.3em * 2); }
+  .theme-tag { font-size: 11px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .specs { display: flex; gap: 10px; font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
   .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
   .tag { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-muted); }
   .tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); display: inline-block; }
-  .price { font-family: var(--font-mono); font-size: 17px; font-weight: 500; margin-top: 6px; }
+  .sale-block { margin-top: auto; padding-top: 6px; }
+  .price { font-family: var(--font-mono); font-size: 17px; font-weight: 500; }
   .price-muted { font-size: 13px; color: var(--ink-muted); font-weight: 400; }
-  .unsellable-label { font-size: 12px; color: var(--ink-muted); margin-top: 6px; font-style: italic; }
+  .unsellable-label { font-size: 12px; color: var(--ink-muted); font-style: italic; }
   .buy-btn { margin-top: 6px; width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--brick); color: white; font-family: var(--font-body); font-weight: 600; font-size: 13px; cursor: pointer; transition: background .15s; }
   .buy-btn:hover { background: var(--brick-dark); }
 
@@ -550,9 +554,28 @@ CARD_SCRIPT = """
   const themeFilter = document.getElementById('themeFilter');
   const statusFilter = document.getElementById('statusFilter');
   const zustandFilter = document.getElementById('zustandFilter');
+  const sortSelect = document.getElementById('sortSelect');
+  const grid = document.getElementById('grid');
   const cards = Array.from(document.querySelectorAll('.card'));
   const stats = document.getElementById('stats');
   const emptyState = document.getElementById('emptyState');
+
+  function applySort() {
+    const mode = sortSelect.value;
+    let sorted = [...cards];
+    if (mode === 'year_desc') {
+      sorted.sort((a, b) => (parseInt(b.dataset.year) || 0) - (parseInt(a.dataset.year) || 0));
+    } else if (mode === 'year_asc') {
+      sorted.sort((a, b) => (parseInt(a.dataset.year) || 9999) - (parseInt(b.dataset.year) || 9999));
+    } else if (mode === 'name_asc') {
+      sorted.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+    } else if (mode === 'parts_desc') {
+      sorted.sort((a, b) => (parseInt(b.dataset.parts) || 0) - (parseInt(a.dataset.parts) || 0));
+    } else {
+      sorted.sort((a, b) => cards.indexOf(a) - cards.indexOf(b));
+    }
+    sorted.forEach(c => grid.appendChild(c));
+  }
 
   function applyFilters() {
     const q = search.value.toLowerCase();
@@ -585,13 +608,14 @@ CARD_SCRIPT = """
   themeFilter.addEventListener('change', applyFilters);
   statusFilter.addEventListener('change', applyFilters);
   zustandFilter.addEventListener('change', applyFilters);
+  sortSelect.addEventListener('change', () => { applySort(); applyFilters(); });
   applyFilters();
 
   const overlay = document.getElementById('modalOverlay');
   const modalBox = document.getElementById('modalBox');
 
   function statusClass(status) {
-    return { 'verfügbar': 'status-available', 'reserviert': 'status-reserved', 'verkauft': 'status-sold', 'unverkäuflich': 'status-unsellable' }[status] || 'status-unsellable';
+    return { 'verfügbar': 'status-available', 'reserviert': 'status-reserved', 'unverkäuflich': 'status-unsellable' }[status] || 'status-unsellable';
   }
 
   function openModalWithData(rec) {
@@ -648,11 +672,32 @@ CARD_SCRIPT = """
 
 
 def build_html(df: pd.DataFrame, cache: dict) -> str:
-    themes = sorted(df["THEME"].dropna().unique())
+    records = [build_card_record(row, cache) for _, row in df.iterrows()]
+
+    # Theme-Filter-Optionen aus den TATSÄCHLICH verwendeten (API-aufgelösten) Theme-Werten bauen,
+    # nicht aus der rohen Excel-Spalte, damit Filter und Kartendaten immer übereinstimmen.
+    themes = sorted(set(r["theme"] for r in records))
     theme_options = "".join(f'<option value="{html.escape(t)}">{html.escape(t)}</option>' for t in themes)
 
-    records = [build_card_record(row, cache) for _, row in df.iterrows()]
-    cards_html = "\n".join(render_card(r) for r in records)
+    # Identische Exemplare (gleiches Set, gleicher Zustand, gleicher Status/Preis, gleiche
+    # Bauanleitung/Karton-Angabe) zu EINER Karte mit Mengenangabe zusammenfassen, statt
+    # mehrere optisch identische Karten nebeneinander zu zeigen.
+    grouped = {}
+    order = []
+    for r in records:
+        key = (r["set_number"], r["zustand_neu"], r["status"], r["price"], r["bauanleitung"], r["originalkarton"])
+        if key not in grouped:
+            g = dict(r)
+            g["quantity"] = 1
+            g["identifiers"] = [r["identifier"]]
+            grouped[key] = g
+            order.append(key)
+        else:
+            grouped[key]["quantity"] += 1
+            grouped[key]["identifiers"].append(r["identifier"])
+    grouped_records = [grouped[k] for k in order]
+
+    cards_html = "\n".join(render_card(r) for r in grouped_records)
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -674,7 +719,7 @@ def build_html(df: pd.DataFrame, cache: dict) -> str:
 <div id="top"></div>
 <section class="hero">
   <h1>Meine Lego-Sammlung</h1>
-  <p>Eine kuratierte Übersicht aller Sets — durchsuchbar, filterbar, teils käuflich.</p>
+  <p>Jedes Set. Jeder Stein. An einem Ort.</p>
   <a class="stats-link" href="stats.html">Alle Zahlen zur Sammlung ansehen →</a>
 </section>
 
@@ -687,16 +732,22 @@ def build_html(df: pd.DataFrame, cache: dict) -> str:
     </select>
     <select id="statusFilter">
       <option value="">Alle Status</option>
-      <option value="unverkäuflich">Unverkäuflich</option>
+      <option value="unverkäuflich">Nicht verfügbar</option>
       <option value="forsale">Zum Verkauf</option>
       <option value="verfügbar">Verfügbar</option>
       <option value="reserviert">Reserviert</option>
-      <option value="verkauft">Verkauft</option>
     </select>
     <select id="zustandFilter">
       <option value="">Neu &amp; Gebraucht</option>
       <option value="neu">Neu / OVP</option>
       <option value="gebraucht">Gebraucht</option>
+    </select>
+    <select id="sortSelect">
+      <option value="">Standard-Reihenfolge</option>
+      <option value="year_desc">Jahr (neueste zuerst)</option>
+      <option value="year_asc">Jahr (älteste zuerst)</option>
+      <option value="name_asc">Name (A–Z)</option>
+      <option value="parts_desc">Teileanzahl (meiste zuerst)</option>
     </select>
   </div>
 </div>
@@ -791,10 +842,9 @@ def build_stats_html(df: pd.DataFrame, cache: dict) -> str:
     </select>
     <select id="statusFilter">
       <option value="">Alle Status</option>
-      <option value="unverkäuflich">Unverkäuflich</option>
+      <option value="unverkäuflich">Nicht verfügbar</option>
       <option value="verfügbar">Verfügbar</option>
       <option value="reserviert">Reserviert</option>
-      <option value="verkauft">Verkauft</option>
     </select>
     <select id="themeFilter">
       <option value="">Alle Themen</option>
