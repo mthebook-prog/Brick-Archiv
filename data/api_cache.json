@@ -719,6 +719,24 @@
     "theme_id": 228,
     "year": 2022
   },
+  "30727-1": {
+    "fetched_at": 1786471063,
+    "name": "TIE Advanced Mini-Build",
+    "num_parts": 68,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/30727-1/166536.jpg",
+    "set_url": "https://rebrickable.com/sets/30727-1/tie-advanced-mini-build/",
+    "theme_id": 158,
+    "year": 2026
+  },
+  "30728-1": {
+    "fetched_at": 1786471064,
+    "name": "The Razor Crest Mini-Build",
+    "num_parts": 74,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/30728-1/170303.jpg",
+    "set_url": "https://rebrickable.com/sets/30728-1/the-razor-crest-mini-build/",
+    "theme_id": 158,
+    "year": 2026
+  },
   "31109-1": {
     "fetched_at": 1786469772,
     "name": "Pirate Ship",
@@ -1025,6 +1043,24 @@
     "theme_id": 1,
     "year": 2026
   },
+  "40907-1": {
+    "fetched_at": 1786471066,
+    "name": "Restaurants of the World: Mexico",
+    "num_parts": 326,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40907-1/171137.jpg",
+    "set_url": "https://rebrickable.com/sets/40907-1/restaurants-of-the-world-mexico/",
+    "theme_id": 301,
+    "year": 2026
+  },
+  "40911-1": {
+    "fetched_at": 1786471067,
+    "name": "Mini Pokémon Center",
+    "num_parts": 233,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40911-1/166803.jpg",
+    "set_url": "https://rebrickable.com/sets/40911-1/mini-pokémon-center/",
+    "theme_id": 776,
+    "year": 2026
+  },
   "40912-1": {
     "fetched_at": 1786469825,
     "name": "Sea Serpent",
@@ -1032,6 +1068,15 @@
     "set_img_url": "https://cdn.rebrickable.com/media/sets/40912-1/177068.jpg",
     "set_url": "https://rebrickable.com/sets/40912-1/sea-serpent/",
     "theme_id": 576,
+    "year": 2026
+  },
+  "40917-1": {
+    "fetched_at": 1786471069,
+    "name": "The Darksaber",
+    "num_parts": 278,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/40917-1/171463.jpg",
+    "set_url": "https://rebrickable.com/sets/40917-1/the-darksaber/",
+    "theme_id": 158,
     "year": 2026
   },
   "40955-1": {
@@ -1178,6 +1223,24 @@
     "theme_id": 1,
     "year": 2026
   },
+  "43010-1": {
+    "fetched_at": 1786471070,
+    "name": "Nike Slam Dunk",
+    "num_parts": 809,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/43010-1/159982.jpg",
+    "set_url": "https://rebrickable.com/sets/43010-1/nike-slam-dunk/",
+    "theme_id": 785,
+    "year": 2025
+  },
+  "43021-1": {
+    "fetched_at": 1786471071,
+    "name": "Nike Dunk Trickshot",
+    "num_parts": 454,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/43021-1/159980.jpg",
+    "set_url": "https://rebrickable.com/sets/43021-1/nike-dunk-trickshot/",
+    "theme_id": 785,
+    "year": 2025
+  },
   "43226-1": {
     "fetched_at": 1786469867,
     "name": "Disney Duos",
@@ -1198,7 +1261,16 @@
   },
   "5010053-1": {
     "error": "not_found",
-    "fetched_at": 1786470492
+    "fetched_at": 1786471073
+  },
+  "5010320-1": {
+    "fetched_at": 1786471074,
+    "name": "The Mandalorian and Grogu Display",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/5010320-1/171462.jpg",
+    "set_url": "https://rebrickable.com/sets/5010320-1/the-mandalorian-and-grogu-display/",
+    "theme_id": 501,
+    "year": 2026
   },
   "60440-1": {
     "fetched_at": 1786469871,
@@ -1776,6 +1848,42 @@
     "theme_id": 158,
     "year": 2025
   },
+  "75415-1": {
+    "fetched_at": 1786471076,
+    "name": "Kylo Ren Helmet",
+    "num_parts": 529,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75415-1/154233.jpg",
+    "set_url": "https://rebrickable.com/sets/75415-1/kylo-ren-helmet/",
+    "theme_id": 158,
+    "year": 2025
+  },
+  "75429-1": {
+    "fetched_at": 1786471077,
+    "name": "AT-AT Driver Helmet",
+    "num_parts": 730,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75429-1/151778.jpg",
+    "set_url": "https://rebrickable.com/sets/75429-1/at-at-driver-helmet/",
+    "theme_id": 158,
+    "year": 2025
+  },
+  "75435-1": {
+    "fetched_at": 1786471078,
+    "name": "Battle of Felucia Separatist MTT",
+    "num_parts": 976,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75435-1/158323.jpg",
+    "set_url": "https://rebrickable.com/sets/75435-1/battle-of-felucia-separatist-mtt/",
+    "theme_id": 158,
+    "year": 2025
+  },
+  "75442-1": {
+    "fetched_at": 1786471079,
+    "name": "The Mandalorian's N-1 Starfighter",
+    "num_parts": 1809,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/75442-1/171445.jpg",
+    "set_url": "https://rebrickable.com/sets/75442-1/the-mandalorians-n-1-starfighter/",
+    "theme_id": 171,
+    "year": 2026
+  },
   "75892-1": {
     "fetched_at": 1786469964,
     "name": "McLaren Senna",
@@ -2190,6 +2298,96 @@
     "theme_id": 686,
     "year": 2025
   },
+  "910059-1": {
+    "fetched_at": 1786471081,
+    "name": "Privateer Frigate Fortuna",
+    "num_parts": 4086,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910059-1/166414.jpg",
+    "set_url": "https://rebrickable.com/sets/910059-1/privateer-frigate-fortuna/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910060-1": {
+    "fetched_at": 1786471082,
+    "name": "Sushi Restaurant",
+    "num_parts": 3604,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910060-1/166421.jpg",
+    "set_url": "https://rebrickable.com/sets/910060-1/sushi-restaurant/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910061-1": {
+    "fetched_at": 1786471083,
+    "name": "Antique Collection",
+    "num_parts": 1504,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910061-1/166427.jpg",
+    "set_url": "https://rebrickable.com/sets/910061-1/antique-collection/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910062-1": {
+    "fetched_at": 1786471085,
+    "name": "Alchemist's Shop",
+    "num_parts": 2319,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910062-1/166433.jpg",
+    "set_url": "https://rebrickable.com/sets/910062-1/alchemists-shop/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910063-1": {
+    "fetched_at": 1786471086,
+    "name": "W.A.L.T.",
+    "num_parts": 766,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910063-1/166439.jpg",
+    "set_url": "https://rebrickable.com/sets/910063-1/walt/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910064-1": {
+    "fetched_at": 1786471087,
+    "name": "Dustmark Keep",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910064-1/173768.jpg",
+    "set_url": "https://rebrickable.com/sets/910064-1/dustmark-keep/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910065-1": {
+    "fetched_at": 1786471089,
+    "name": "Coconut Cape",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910065-1/173754.jpg",
+    "set_url": "https://rebrickable.com/sets/910065-1/coconut-cape/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910066-1": {
+    "fetched_at": 1786471090,
+    "name": "Brick Railroad Locomotive",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910066-1/173738.jpg",
+    "set_url": "https://rebrickable.com/sets/910066-1/brick-railroad-locomotive/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910067-1": {
+    "fetched_at": 1786471092,
+    "name": "Hot Air Balloon",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910067-1/173794.jpg",
+    "set_url": "https://rebrickable.com/sets/910067-1/hot-air-balloon/",
+    "theme_id": 719,
+    "year": 2026
+  },
+  "910068-1": {
+    "fetched_at": 1786471093,
+    "name": "University of Science",
+    "num_parts": 0,
+    "set_img_url": "https://cdn.rebrickable.com/media/sets/910068-1/173781.jpg",
+    "set_url": "https://rebrickable.com/sets/910068-1/university-of-science/",
+    "theme_id": 719,
+    "year": 2026
+  },
   "92177-1": {
     "fetched_at": 1786470032,
     "name": "Ship in a Bottle",
@@ -2262,6 +2460,11 @@
   "theme:435": {
     "fetched_at": 1786470086,
     "name": "Ninjago",
+    "parent_id": null
+  },
+  "theme:501": {
+    "fetched_at": 1786471094,
+    "name": "Gear",
     "parent_id": null
   },
   "theme:52": {
@@ -2424,6 +2627,11 @@
     "name": "Series 22 Minifigures",
     "parent_id": 535
   },
+  "theme:719": {
+    "fetched_at": 1786471096,
+    "name": "BrickLink Designer Program",
+    "parent_id": null
+  },
   "theme:720": {
     "fetched_at": 1786470065,
     "name": "The Muppets",
@@ -2459,6 +2667,11 @@
     "name": "Botanicals",
     "parent_id": null
   },
+  "theme:776": {
+    "fetched_at": 1786471098,
+    "name": "Pokémon",
+    "parent_id": null
+  },
   "theme:778": {
     "fetched_at": 1786470104,
     "name": "VIP Add-On Packs",
@@ -2468,5 +2681,10 @@
     "fetched_at": 1786470103,
     "name": "The Infinity Saga",
     "parent_id": 696
+  },
+  "theme:785": {
+    "fetched_at": 1786471097,
+    "name": "Nike",
+    "parent_id": null
   }
 }
