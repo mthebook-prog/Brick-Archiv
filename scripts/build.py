@@ -232,26 +232,33 @@ def fetch_theme_name(theme_id, cache: dict) -> str | None:
         return None
     url = f"{API_BASE}/themes/{int(theme_id)}/"
     headers = {"Authorization": f"key {API_KEY}"}
-    try:
-        resp = requests.get(url, headers=headers, timeout=15)
-        if resp.status_code == 200:
-            data = resp.json()
-            cache[key] = {
-                "name": data.get("name"),
-                "parent_id": data.get("parent_id"),
-                "fetched_at": int(time.time()),
-            }
-            time.sleep(1.1)
-            return cache[key]["name"]
-        elif resp.status_code == 429:
-            time.sleep(5)
+
+    for attempt in range(4):
+        try:
+            resp = requests.get(url, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                data = resp.json()
+                cache[key] = {
+                    "name": data.get("name"),
+                    "parent_id": data.get("parent_id"),
+                    "fetched_at": int(time.time()),
+                }
+                time.sleep(1.1)
+                return cache[key]["name"]
+            elif resp.status_code == 429:
+                wait = 5 * (attempt + 1)
+                print(f"  Rate-Limit erreicht bei Theme {theme_id}, warte {wait}s (Versuch {attempt + 1}/4)...", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            else:
+                cache[key] = {"error": f"http_{resp.status_code}", "fetched_at": int(time.time())}
+                time.sleep(1.1)
+                return None
+        except requests.RequestException:
             return None
-        else:
-            cache[key] = {"error": f"http_{resp.status_code}", "fetched_at": int(time.time())}
-            time.sleep(1.1)
-            return None
-    except requests.RequestException:
-        return None
+
+    print(f"  Theme {theme_id}: nach mehreren Versuchen weiterhin Rate-Limit, überspringe für diesen Lauf.", file=sys.stderr)
+    return None
 
 
 def theme_breadcrumb(theme_id, cache: dict) -> tuple[str, str]:
