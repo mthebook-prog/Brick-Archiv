@@ -222,7 +222,7 @@ def fetch_set_data(set_num: str) -> dict | None:
 
 
 def fetch_theme_name(theme_id, cache: dict) -> str | None:
-    """Löst eine Theme-ID über die Rebrickable-API in einen Klartextnamen auf (gecacht)."""
+    """Löst eine Theme-ID über die Rebrickable-API in einen Klartextnamen auf (gecacht, inkl. parent_id)."""
     if theme_id is None or pd.isna(theme_id):
         return None
     key = f"{THEME_CACHE_PREFIX}{int(theme_id)}"
@@ -236,7 +236,11 @@ def fetch_theme_name(theme_id, cache: dict) -> str | None:
         resp = requests.get(url, headers=headers, timeout=15)
         if resp.status_code == 200:
             data = resp.json()
-            cache[key] = {"name": data.get("name"), "fetched_at": int(time.time())}
+            cache[key] = {
+                "name": data.get("name"),
+                "parent_id": data.get("parent_id"),
+                "fetched_at": int(time.time()),
+            }
             time.sleep(1.1)
             return cache[key]["name"]
         elif resp.status_code == 429:
@@ -248,6 +252,42 @@ def fetch_theme_name(theme_id, cache: dict) -> str | None:
             return None
     except requests.RequestException:
         return None
+
+
+def theme_breadcrumb(theme_id, cache: dict) -> tuple[str, str]:
+    """
+    Baut aus der Theme-Hierarchie (parent_id-Kette) einen Breadcrumb-Pfad, z.B.
+    "Star Wars > Ultimate Collector Series". Gibt (leaf_name, full_path) zurück.
+    Sets, die Rebrickable direkt unter einem Ober-Theme einordnet (z.B. sehr neue
+    Sets ohne eigenes Subtheme), liefern hier logischerweise nur die eine Ebene.
+    """
+    if theme_id is None or pd.isna(theme_id):
+        return ("Unbekannt", "Unbekannt")
+
+    chain = []
+    current_id = int(theme_id)
+    seen = set()
+    for _ in range(6):  # Sicherheitslimit gegen Zirkelbezüge
+        if current_id in seen:
+            break
+        seen.add(current_id)
+        key = f"{THEME_CACHE_PREFIX}{current_id}"
+        entry = cache.get(key)
+        if not entry or "error" in entry:
+            break
+        chain.append(entry.get("name") or "?")
+        parent_id = entry.get("parent_id")
+        if parent_id is None or pd.isna(parent_id):
+            break
+        current_id = int(parent_id)
+
+    if not chain:
+        return ("Unbekannt", "Unbekannt")
+
+    chain.reverse()  # von oberster Ebene zur spezifischsten
+    leaf = chain[-1]
+    full_path = " > ".join(chain)
+    return (leaf, full_path)
 
 
 def assign_missing_identifiers(df: pd.DataFrame) -> pd.DataFrame:
@@ -307,14 +347,25 @@ def enrich_data(df: pd.DataFrame, cache: dict) -> dict:
             new_calls += 1
         time.sleep(1.1)  # Rebrickable erlaubt im Schnitt ~1 Anfrage/Sekunde
 
-    # Theme-Namen für alle vorkommenden theme_ids auflösen
+    # Theme-Namen für alle vorkommenden theme_ids UND deren komplette Parent-Kette auflösen
     theme_ids = set()
     for set_num in unique_set_nums:
         tid = cache.get(set_num, {}).get("theme_id")
         if tid is not None:
-            theme_ids.add(tid)
-    for tid in theme_ids:
+            theme_ids.add(int(tid))
+
+    resolved = set()
+    to_resolve = list(theme_ids)
+    while to_resolve:
+        tid = to_resolve.pop()
+        if tid in resolved:
+            continue
+        resolved.add(tid)
         fetch_theme_name(tid, cache)
+        entry = cache.get(f"{THEME_CACHE_PREFIX}{tid}", {})
+        parent_id = entry.get("parent_id")
+        if parent_id is not None and not pd.isna(parent_id) and int(parent_id) not in resolved:
+            to_resolve.append(int(parent_id))
 
     print(f"{new_calls} neue API-Aufrufe, {len(unique_set_nums) - new_calls} aus Cache.")
     return cache
@@ -338,15 +389,21 @@ def build_card_record(row, cache: dict) -> dict:
     name = api_name or (str(excel_name) if pd.notna(excel_name) else f"Set {row['Set Number']}")
 
     theme_id = api.get("theme_id")
-    theme_from_api = cache.get(f"{THEME_CACHE_PREFIX}{int(theme_id)}", {}).get("name") if theme_id is not None else None
+    if theme_id is not None:
+        theme_leaf, theme_path = theme_breadcrumb(theme_id, cache)
+    else:
+        theme_leaf, theme_path = (None, None)
     excel_theme = row.get("THEME")
-    theme = theme_from_api or (str(excel_theme) if pd.notna(excel_theme) else "Unbekannt")
+    excel_theme_str = str(excel_theme) if pd.notna(excel_theme) else None
+    theme = theme_leaf or excel_theme_str or "Unbekannt"
+    theme_display = theme_path or excel_theme_str or "Unbekannt"
 
     return {
         "identifier": str(row["Identifier"]),
         "set_number": str(row["Set Number"]),
         "name": name,
         "theme": theme,
+        "theme_display": theme_display,
         "year": api.get("year", ""),
         "num_parts": api.get("num_parts", ""),
         "img": api.get("set_img_url", ""),
@@ -402,7 +459,7 @@ def render_card(rec: dict) -> str:
               {f'<span class="set-num">{rec["year"]}</span>' if rec['year'] else ''}
             </div>
             <h3>{html.escape(rec['name'])}</h3>
-            <div class="theme-tag">{html.escape(rec['theme'])}</div>
+            <div class="theme-tag">{html.escape(rec['theme_display'])}</div>
             <div class="specs">
               <span>{zustand_label}</span>
               {f'<span>{rec["num_parts"]} Teile</span>' if rec['num_parts'] else ''}
@@ -550,7 +607,7 @@ CARD_SCRIPT = """
       <div class="modal-body">
         <span class="badge ${statusClass(rec.status)}">${rec.status_label}</span>
         <h2>${rec.name}</h2>
-        <div class="modal-theme">#${rec.set_number} — ${rec.theme}</div>
+        <div class="modal-theme">#${rec.set_number} — ${rec.theme_display}</div>
         <div class="modal-grid">
           <div><span>Zustand</span>${rec.zustand_neu ? 'Neu / ungeöffnet' : 'Gebraucht / geöffnet'}</div>
           <div><span>Erscheinungsjahr</span>${rec.year || '—'}</div>
